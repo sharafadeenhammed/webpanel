@@ -12,6 +12,7 @@ const bcrypt= require('bcrypt')
 const flash= require('express-flash')
 const session = require('express-session')
 const axios = require("axios").default;
+const cors = require("cors");
 
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname + "/public/"));
@@ -34,6 +35,10 @@ initializePassport(
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
+app.use(cors({
+  origin: "*",
+  credentials: true
+}))
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
