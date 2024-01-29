@@ -95,5 +95,5 @@ function checkNotAuthenticated(req,res,next){
   }
   next()
 }
-console.log("Server Running on Port 5050...")
+console.log("Server Running on Port 4000...")
 app.listen(4000)
