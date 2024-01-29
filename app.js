@@ -10,7 +10,8 @@ const users = require('./users')
 const passport= require('passport')
 const bcrypt= require('bcrypt')
 const flash= require('express-flash')
-const session= require('express-session')
+const session = require('express-session')
+const axios = require("axios").default;
 
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname + "/public/"));
@@ -76,8 +77,20 @@ app.post('/login',checkNotAuthenticated,passport.authenticate('local',{
   failureFlash: true
 }))
 
-app.post("/verify", function (req, res, next) {
+app.post("/verify", async function (req, res, next) {
+  // console.log(req.body[ "g-recaptcha-response" ])
   console.log(req.body);
+  console.log(process.env.RECAPTCHA_SECRET)
+  try {
+    const data = await axios.post("https://www.google.com/recaptcha/api/siteverify",
+      {
+        secret: "6Lc3Gl8pAAAAAGlt0QTkf03Y1ej5u6a1aNjLL--S",
+        response: req.body[ "g-recaptcha-response" ]
+      })
+    console.log(data.data, "----", data.status, "----", data.statusText)
+  } catch(error) {
+    console.log("error: ", error);
+  }
 })
 
 function checkAuthenticated(req,res,next){
@@ -97,3 +110,5 @@ function checkNotAuthenticated(req,res,next){
 }
 console.log("Server Running on Port 4000...")
 app.listen(4000)
+
+
