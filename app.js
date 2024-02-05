@@ -61,9 +61,11 @@ app.get('/', checkAuthenticated,async (req, res) => {
           data.push(JSON.parse(file[i]));
         }
       }
+      const altData = data.filter((data) => (data.username !== "" || data.username !== "") || (data.username && data.custom !== ""));
+      console.log(data, "\n\n", altData);
 
       res.render('index.ejs', {
-        data: data
+        data: altData
       });
     }
   });
@@ -78,22 +80,6 @@ app.post('/login',checkNotAuthenticated,passport.authenticate('local',{
   failureRedirect: '/login',
   failureFlash: true
 }))
-
-app.post("/verify", async function (req, res, next) {
-  // console.log(req.body[ "g-recaptcha-response" ])
-  console.log(req.body);
-  console.log(process.env.RECAPTCHA_SECRET)
-  try {
-    const data = await axios.post("https://www.google.com/recaptcha/api/siteverify",
-      {
-        secret: "6Lc3Gl8pAAAAAGlt0QTkf03Y1ej5u6a1aNjLL--S",
-        response: req.body[ "g-recaptcha-response" ]
-      })
-    console.log(data.data, "----", data.status, "----", data.statusText)
-  } catch(error) {
-    console.log("error: ", error);
-  }
-})
 
 function checkAuthenticated(req,res,next){
   if(req.isAuthenticated())
