@@ -62,7 +62,6 @@ app.get('/', checkAuthenticated,async (req, res) => {
         }
       }
       const altData = data.filter((data) => (data.username !== "" || data.username !== "") || (data.username && data.custom !== ""));
-      console.log(data, "\n\n", altData);
 
       res.render('index.ejs', {
         data: altData
